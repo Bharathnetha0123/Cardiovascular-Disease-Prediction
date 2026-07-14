@@ -1,0 +1,185 @@
+{
+  "dataset_size": 1025,
+  "train_size": 820,
+  "test_size": 205,
+  "n_features": 13,
+  "best_model": "Logistic Regression",
+  "best_train_accuracy": 0.6793,
+  "best_test_accuracy": 0.7268,
+  "results": [
+    {
+      "model": "Logistic Regression",
+      "accuracy": 0.7268,
+      "precision": 0.73,
+      "recall": 0.7157,
+      "f1": 0.7228,
+      "train_accuracy": 0.6793,
+      "confusion_matrix": [
+        [
+          76,
+          27
+        ],
+        [
+          29,
+          73
+        ]
+      ],
+      "classification_report": "              precision    recall  f1-score   support\n\n     Healthy       0.72      0.74      0.73       103\n     Disease       0.73      0.72      0.72       102\n\n    accuracy                           0.73       205\n   macro avg       0.73      0.73      0.73       205\nweighted avg       0.73      0.73      0.73       205\n",
+      "cm_plot": "plots/cm_logistic_regression.png"
+    },
+    {
+      "model": "Decision Tree",
+      "accuracy": 0.6049,
+      "precision": 0.6105,
+      "recall": 0.5686,
+      "f1": 0.5888,
+      "train_accuracy": 0.772,
+      "confusion_matrix": [
+        [
+          66,
+          37
+        ],
+        [
+          44,
+          58
+        ]
+      ],
+      "classification_report": "              precision    recall  f1-score   support\n\n     Healthy       0.60      0.64      0.62       103\n     Disease       0.61      0.57      0.59       102\n\n    accuracy                           0.60       205\n   macro avg       0.61      0.60      0.60       205\nweighted avg       0.61      0.60      0.60       205\n",
+      "cm_plot": "plots/cm_decision_tree.png"
+    },
+    {
+      "model": "Random Forest",
+      "accuracy": 0.6927,
+      "precision": 0.7053,
+      "recall": 0.6569,
+      "f1": 0.6802,
+      "train_accuracy": 1.0,
+      "confusion_matrix": [
+        [
+          75,
+          28
+        ],
+        [
+          35,
+          67
+        ]
+      ],
+      "classification_report": "              precision    recall  f1-score   support\n\n     Healthy       0.68      0.73      0.70       103\n     Disease       0.71      0.66      0.68       102\n\n    accuracy                           0.69       205\n   macro avg       0.69      0.69      0.69       205\nweighted avg       0.69      0.69      0.69       205\n",
+      "cm_plot": "plots/cm_random_forest.png"
+    },
+    {
+      "model": "Support Vector Machine",
+      "accuracy": 0.6829,
+      "precision": 0.6907,
+      "recall": 0.6569,
+      "f1": 0.6734,
+      "train_accuracy": 0.7854,
+      "confusion_matrix": [
+        [
+          73,
+          30
+        ],
+        [
+          35,
+          67
+        ]
+      ],
+      "classification_report": "              precision    recall  f1-score   support\n\n     Healthy       0.68      0.71      0.69       103\n     Disease       0.69      0.66      0.67       102\n\n    accuracy                           0.68       205\n   macro avg       0.68      0.68      0.68       205\nweighted avg       0.68      0.68      0.68       205\n",
+      "cm_plot": "plots/cm_support_vector_machine.png"
+    },
+    {
+      "model": "K-Nearest Neighbor",
+      "accuracy": 0.6,
+      "precision": 0.6136,
+      "recall": 0.5294,
+      "f1": 0.5684,
+      "train_accuracy": 0.6951,
+      "confusion_matrix": [
+        [
+          69,
+          34
+        ],
+        [
+          48,
+          54
+        ]
+      ],
+      "classification_report": "              precision    recall  f1-score   support\n\n     Healthy       0.59      0.67      0.63       103\n     Disease       0.61      0.53      0.57       102\n\n    accuracy                           0.60       205\n   macro avg       0.60      0.60      0.60       205\nweighted avg       0.60      0.60      0.60       205\n",
+      "cm_plot": "plots/cm_k-nearest_neighbor.png"
+    }
+  ],
+  "correlation_insights": {
+    "positive": [
+      {
+        "feature": "Major Vessels",
+        "value": 0.252
+      },
+      {
+        "feature": "Sex",
+        "value": 0.171
+      },
+      {
+        "feature": "ST Depression",
+        "value": 0.149
+      },
+      {
+        "feature": "Exercise Angina",
+        "value": 0.12
+      },
+      {
+        "feature": "Age",
+        "value": 0.09
+      },
+      {
+        "feature": "Thalassemia",
+        "value": 0.06
+      },
+      {
+        "feature": "Resting Blood Pressure",
+        "value": 0.058
+      },
+      {
+        "feature": "Fasting Blood Sugar",
+        "value": 0.035
+      },
+      {
+        "feature": "Cholesterol",
+        "value": 0.025
+      },
+      {
+        "feature": "Rest ECG",
+        "value": 0.002
+      }
+    ],
+    "negative": [
+      {
+        "feature": "Slope",
+        "value": -0.06
+      },
+      {
+        "feature": "Max Heart Rate",
+        "value": -0.092
+      },
+      {
+        "feature": "Chest Pain Type",
+        "value": -0.177
+      }
+    ]
+  },
+  "columns": [
+    "age",
+    "sex",
+    "cp",
+    "trestbps",
+    "chol",
+    "fbs",
+    "restecg",
+    "thalach",
+    "exang",
+    "oldpeak",
+    "slope",
+    "ca",
+    "thal",
+    "target"
+  ]
+}

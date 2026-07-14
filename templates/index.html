@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-6">
+        <span class="badge badge-soft mb-3"><i class="bi bi-cpu me-1"></i> Machine Learning Powered</span>
+        <h1 class="display-4 fw-bold text-balance mb-3">
+          Cardiovascular Disease Prediction System
+        </h1>
+        <p class="lead text-muted-2 mb-4 text-pretty">
+          Predict the risk of heart disease from clinical parameters using trained
+          machine learning models. Explore the data, compare algorithms, and get an
+          instant risk assessment with a probability score.
+        </p>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="{{ url_for('prediction') }}" class="btn btn-brand btn-lg px-4">
+            <i class="bi bi-activity me-2"></i>Start Prediction
+          </a>
+          <a href="{{ url_for('dashboard') }}" class="btn btn-outline-light-2 btn-lg px-4">
+            <i class="bi bi-bar-chart-line me-2"></i>View Dashboard
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-card">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+              <p class="text-muted-2 small mb-1">Best Model</p>
+              <h4 class="fw-bold mb-0">{{ metrics.best_model if metrics else 'Random Forest' }}</h4>
+            </div>
+            <span class="hero-ring">
+              <i class="bi bi-heart-pulse-fill"></i>
+            </span>
+          </div>
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="stat-tile">
+                <p class="stat-label">Test Accuracy</p>
+                <p class="stat-value">{{ '%.1f'|format(metrics.best_test_accuracy * 100) if metrics else '—' }}%</p>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="stat-tile">
+                <p class="stat-label">Dataset Size</p>
+                <p class="stat-value">{{ metrics.dataset_size if metrics else '—' }}</p>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="stat-tile">
+                <p class="stat-label">Algorithms</p>
+                <p class="stat-value">5</p>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="stat-tile">
+                <p class="stat-label">Features</p>
+                <p class="stat-value">{{ metrics.n_features if metrics else 13 }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Feature cards -->
+<section class="container py-5">
+  <div class="text-center mb-5">
+    <h2 class="fw-bold">A Complete ML Pipeline</h2>
+    <p class="text-muted-2">From raw data to real-time predictions, everything in one place.</p>
+  </div>
+  <div class="row g-4">
+    {% set features = [
+      ('bi-cloud-arrow-up', 'Dataset Upload', 'Upload a CSV and instantly inspect its shape, data types, missing values and statistics.', 'upload'),
+      ('bi-diagram-3', 'Data Preprocessing', 'Missing-value handling, duplicate removal, encoding and feature scaling.', 'upload'),
+      ('bi-graph-up-arrow', 'Visualization', '15+ EDA plots including histograms, box plots, pair plots and heatmaps.', 'visualization'),
+      ('bi-grid-3x3', 'Correlation Analysis', 'Understand positive, negative and highly correlated features.', 'visualization'),
+      ('bi-cpu', 'Model Comparison', 'Five algorithms trained and evaluated with a full metrics comparison.', 'dashboard'),
+      ('bi-heart-pulse', 'Risk Prediction', 'Enter clinical values and get a Healthy / Disease result with probability.', 'prediction')
+    ] %}
+    {% for icon, title, desc, endpoint in features %}
+    <div class="col-md-6 col-lg-4">
+      <a href="{{ url_for(endpoint) }}" class="feature-card h-100 d-block text-decoration-none">
+        <span class="feature-icon"><i class="bi {{ icon }}"></i></span>
+        <h5 class="fw-semibold mt-3 mb-2">{{ title }}</h5>
+        <p class="text-muted-2 small mb-0">{{ desc }}</p>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Workflow -->
+<section class="workflow-section py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Machine Learning Workflow</h2>
+      <p class="text-muted-2">The end-to-end process behind every prediction.</p>
+    </div>
+    <div class="workflow-track">
+      {% for step in ['Load Dataset','Data Cleaning','EDA','Visualization','Train-Test Split','Feature Scaling','Train Models','Evaluate','Save Best Model','Prediction'] %}
+      <div class="workflow-step">
+        <span class="workflow-num">{{ loop.index }}</span>
+        <span class="workflow-label">{{ step }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

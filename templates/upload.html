@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Dataset{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div class="container">
+    <h1 class="fw-bold mb-1">Dataset Upload &amp; Exploration</h1>
+    <p class="text-muted-2 mb-0">Upload a heart-disease CSV to inspect its structure, quality and statistics.</p>
+  </div>
+</section>
+
+<section class="container py-4">
+  <div class="row g-4">
+    <!-- Upload form -->
+    <div class="col-lg-4">
+      <div class="panel">
+        <h5 class="fw-semibold mb-3"><i class="bi bi-cloud-arrow-up me-2 text-brand"></i>Upload CSV</h5>
+        <form method="POST" enctype="multipart/form-data" id="uploadForm">
+          <div class="mb-3">
+            <label for="dataset" class="form-label small fw-medium">Choose a .csv file</label>
+            <input class="form-control" type="file" id="dataset" name="dataset" accept=".csv" required />
+          </div>
+          <button type="submit" class="btn btn-brand w-100">
+            <i class="bi bi-upload me-2"></i>Upload &amp; Analyze
+          </button>
+        </form>
+        <hr class="my-4" />
+        <p class="small text-muted-2 mb-2 fw-medium">Preprocessing performed</p>
+        <ul class="list-unstyled small text-muted-2 mb-0 preprocess-list">
+          <li><i class="bi bi-check-circle-fill text-brand me-2"></i>Handle missing values</li>
+          <li><i class="bi bi-check-circle-fill text-brand me-2"></i>Remove duplicates</li>
+          <li><i class="bi bi-check-circle-fill text-brand me-2"></i>Encode categorical columns</li>
+          <li><i class="bi bi-check-circle-fill text-brand me-2"></i>Feature scaling (StandardScaler)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div class="col-lg-8">
+      {% if error %}
+        <div class="alert alert-danger"><i class="bi bi-exclamation-triangle me-2"></i>{{ error }}</div>
+      {% endif %}
+
+      {% if not info and not error %}
+        <div class="panel text-center py-5">
+          <i class="bi bi-filetype-csv display-4 text-brand"></i>
+          <h5 class="fw-semibold mt-3">No dataset loaded yet</h5>
+          <p class="text-muted-2 mb-0">Upload a CSV file to see the first 10 rows, shape, data types,
+            missing values and a statistical summary.</p>
+        </div>
+      {% endif %}
+
+      {% if info %}
+        <!-- Summary tiles -->
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-md-3">
+            <div class="mini-stat"><p class="mini-label">Rows</p><p class="mini-value">{{ info.rows }}</p></div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="mini-stat"><p class="mini-label">Columns</p><p class="mini-value">{{ info.cols }}</p></div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="mini-stat"><p class="mini-label">Missing</p><p class="mini-value">{{ info.total_missing }}</p></div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="mini-stat"><p class="mini-label">Duplicates</p><p class="mini-value">{{ info.duplicates }}</p></div>
+          </div>
+        </div>
+
+        <div class="panel mb-4">
+          <h6 class="fw-semibold mb-3">First 10 Rows <span class="text-muted-2 small">({{ info.filename }})</span></h6>
+          <div class="table-responsive">{{ info.head | safe }}</div>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="panel h-100">
+              <h6 class="fw-semibold mb-3">Data Types</h6>
+              <div class="table-responsive scroll-box">{{ info.dtypes | safe }}</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="panel h-100">
+              <h6 class="fw-semibold mb-3">Missing Values</h6>
+              <div class="table-responsive scroll-box">{{ info.missing | safe }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel mt-4">
+          <h6 class="fw-semibold mb-3">Statistical Summary</h6>
+          <div class="table-responsive">{{ info.describe | safe }}</div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

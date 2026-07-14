@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div class="container">
+    <h1 class="fw-bold mb-1">Model Dashboard</h1>
+    <p class="text-muted-2 mb-0">Training summary, algorithm comparison and recent predictions.</p>
+  </div>
+</section>
+
+<section class="container py-4">
+  {% if not metrics %}
+    <div class="panel text-center py-5">
+      <i class="bi bi-exclamation-circle display-4 text-brand"></i>
+      <h5 class="fw-semibold mt-3">No trained models found</h5>
+      <p class="text-muted-2 mb-0">Run <code>python train_model.py</code> to train the models and populate the dashboard.</p>
+    </div>
+  {% else %}
+    <!-- Key stats -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-lg-3">
+        <div class="stat-card">
+          <span class="stat-card-icon"><i class="bi bi-database"></i></span>
+          <div><p class="mini-label mb-0">Dataset Size</p><p class="stat-card-value">{{ metrics.dataset_size }}</p></div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="stat-card">
+          <span class="stat-card-icon"><i class="bi bi-mortarboard"></i></span>
+          <div><p class="mini-label mb-0">Training Accuracy</p><p class="stat-card-value">{{ '%.2f'|format(metrics.best_train_accuracy * 100) }}%</p></div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="stat-card">
+          <span class="stat-card-icon"><i class="bi bi-clipboard-check"></i></span>
+          <div><p class="mini-label mb-0">Testing Accuracy</p><p class="stat-card-value">{{ '%.2f'|format(metrics.best_test_accuracy * 100) }}%</p></div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="stat-card">
+          <span class="stat-card-icon"><i class="bi bi-trophy"></i></span>
+          <div><p class="mini-label mb-0">Best Model</p><p class="stat-card-value fs-6">{{ metrics.best_model }}</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Comparison table -->
+      <div class="col-lg-7">
+        <div class="panel h-100">
+          <h5 class="fw-semibold mb-3">Algorithm Comparison</h5>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 comparison-table">
+              <thead>
+                <tr>
+                  <th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1 Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in metrics.results %}
+                <tr class="{% if r.model == metrics.best_model %}best-row{% endif %}">
+                  <td class="fw-medium">
+                    {{ r.model }}
+                    {% if r.model == metrics.best_model %}
+                      <span class="badge badge-best ms-1"><i class="bi bi-trophy-fill me-1"></i>Best</span>
+                    {% endif %}
+                  </td>
+                  <td>{{ '%.3f'|format(r.accuracy) }}</td>
+                  <td>{{ '%.3f'|format(r.precision) }}</td>
+                  <td>{{ '%.3f'|format(r.recall) }}</td>
+                  <td>{{ '%.3f'|format(r.f1) }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparison chart -->
+      <div class="col-lg-5">
+        <div class="panel h-100">
+          <h5 class="fw-semibold mb-3">Accuracy Comparison</h5>
+          <img src="{{ url_for('static', filename='plots/model_comparison.png') }}"
+               alt="Model accuracy comparison chart" class="img-fluid rounded plot-img" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Confusion matrix of best model + classification report -->
+    <div class="row g-4 mt-1">
+      {% set best = metrics.results | selectattr('model', 'equalto', metrics.best_model) | first %}
+      <div class="col-lg-5">
+        <div class="panel h-100">
+          <h5 class="fw-semibold mb-3">Confusion Matrix &mdash; {{ metrics.best_model }}</h5>
+          <img src="{{ url_for('static', filename=best.cm_plot) }}"
+               alt="Confusion matrix" class="img-fluid rounded plot-img" />
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="panel h-100">
+          <h5 class="fw-semibold mb-3">Classification Report &mdash; {{ metrics.best_model }}</h5>
+          <pre class="report-block mb-0">{{ best.classification_report }}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent predictions -->
+    <div class="panel mt-4">
+      <h5 class="fw-semibold mb-3">Recent Predictions</h5>
+      {% if predictions %}
+      <div class="table-responsive">
+        <table class="table table-sm align-middle mb-0">
+          <thead>
+            <tr><th>Time</th><th>Age</th><th>Sex</th><th>Result</th><th>Probability</th></tr>
+          </thead>
+          <tbody>
+            {% for p in predictions %}
+            <tr>
+              <td class="small text-muted-2">{{ p.created_at }}</td>
+              <td>{{ p.age }}</td>
+              <td>{{ 'Male' if p.sex == 1 else 'Female' }}</td>
+              <td>
+                {% if p.result == 'Heart Disease Detected' %}
+                  <span class="badge bg-danger-subtle text-danger-2">{{ p.result }}</span>
+                {% else %}
+                  <span class="badge bg-success-subtle text-success-emphasis">{{ p.result }}</span>
+                {% endif %}
+              </td>
+              <td>{{ p.probability }}%</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="text-muted-2 mb-0">No predictions yet. Make one on the
+        <a href="{{ url_for('prediction') }}">Prediction page</a>.</p>
+      {% endif %}
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

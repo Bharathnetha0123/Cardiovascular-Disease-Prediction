@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Visualization{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div class="container">
+    <h1 class="fw-bold mb-1">Data Visualization &amp; EDA</h1>
+    <p class="text-muted-2 mb-0">Exploratory plots generated from the training dataset.</p>
+  </div>
+</section>
+
+<section class="container py-4">
+  {% if not plots and not has_corr %}
+    <div class="panel text-center py-5">
+      <i class="bi bi-image display-4 text-brand"></i>
+      <h5 class="fw-semibold mt-3">No plots found</h5>
+      <p class="text-muted-2 mb-0">Run <code>python train_model.py</code> to generate all visualizations.</p>
+    </div>
+  {% endif %}
+
+  <!-- Correlation Matrix section -->
+  {% if has_corr %}
+  <div class="panel mb-4">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-7">
+        <img src="{{ url_for('static', filename='plots/correlation_matrix.png') }}"
+             alt="Correlation matrix heatmap" class="img-fluid rounded plot-img" />
+      </div>
+      <div class="col-lg-5">
+        <h4 class="fw-bold mb-3">Correlation Matrix</h4>
+        <p class="text-muted-2">The heatmap shows how strongly each feature relates to the others and to the target.</p>
+        {% if metrics and metrics.correlation_insights %}
+        <p class="fw-semibold mb-1 text-brand"><i class="bi bi-arrow-up-right me-1"></i>Positive correlation</p>
+        <p class="small text-muted-2">
+          {% for f in metrics.correlation_insights.positive[:4] %}
+            {{ f.feature }} ({{ '%.2f'|format(f.value) }}){% if not loop.last %}, {% endif %}
+          {% endfor %}
+        </p>
+        <p class="fw-semibold mb-1 text-danger-2"><i class="bi bi-arrow-down-right me-1"></i>Negative correlation</p>
+        <p class="small text-muted-2">
+          {% for f in metrics.correlation_insights.negative[:4] %}
+            {{ f.feature }} ({{ '%.2f'|format(f.value) }}){% if not loop.last %}, {% endif %}
+          {% endfor %}
+        </p>
+        <p class="small text-muted-2 mb-0"><strong>Highly correlated</strong> features (|r| &gt; 0.3) are the strongest predictors of heart disease.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Plot gallery -->
+  <div class="row g-4">
+    {% for title, path in plots %}
+    <div class="col-md-6 col-lg-4">
+      <div class="panel plot-card h-100">
+        <h6 class="fw-semibold mb-3">{{ title }}</h6>
+        <a href="{{ url_for('static', filename=path) }}" target="_blank" rel="noopener">
+          <img src="{{ url_for('static', filename=path) }}" alt="{{ title }} plot"
+               class="img-fluid rounded plot-img" loading="lazy" />
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

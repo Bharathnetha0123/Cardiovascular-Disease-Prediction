@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div class="container">
+    <h1 class="fw-bold mb-1">About the Project</h1>
+    <p class="text-muted-2 mb-0">Understanding the machine learning behind cardiovascular disease prediction.</p>
+  </div>
+</section>
+
+<section class="container py-4">
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <div class="panel h-100">
+        <span class="feature-icon"><i class="bi bi-cpu"></i></span>
+        <h4 class="fw-bold mt-3">What is Machine Learning?</h4>
+        <p class="text-muted-2">
+          Machine Learning (ML) is a branch of artificial intelligence in which algorithms learn
+          patterns directly from data instead of being explicitly programmed. In supervised
+          classification, a model is trained on labelled examples and then predicts the label for
+          new, unseen inputs. This project uses ML to learn the relationship between clinical
+          parameters and the presence of heart disease.
+        </p>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="panel h-100">
+        <span class="feature-icon"><i class="bi bi-heart-pulse"></i></span>
+        <h4 class="fw-bold mt-3">Heart Disease Prediction</h4>
+        <p class="text-muted-2">
+          Cardiovascular disease is a leading cause of death worldwide. Early risk assessment can
+          support timely intervention. By analysing indicators such as age, blood pressure,
+          cholesterol, chest pain type and ECG results, the trained model estimates the likelihood
+          that a patient has heart disease and returns a probability score.
+        </p>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="panel h-100">
+        <span class="feature-icon"><i class="bi bi-database"></i></span>
+        <h4 class="fw-bold mt-3">The Dataset</h4>
+        <p class="text-muted-2 mb-3">
+          The dataset follows the well-known UCI heart-disease schema with 13 clinical features and
+          a binary target (0 = healthy, 1 = disease). Features are cleaned, encoded and scaled
+          before training.
+        </p>
+        <div class="row row-cols-2 g-2 small">
+          {% for f in ['Age','Sex','Chest Pain','Blood Pressure','Cholesterol','Fasting Sugar','Rest ECG','Max Heart Rate','Exercise Angina','ST Depression','Slope','Major Vessels','Thalassemia'] %}
+          <div class="col"><span class="chip"><i class="bi bi-dot"></i>{{ f }}</span></div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="panel h-100">
+        <span class="feature-icon"><i class="bi bi-diagram-3"></i></span>
+        <h4 class="fw-bold mt-3">Algorithms Used</h4>
+        <p class="text-muted-2 mb-3">Five classification algorithms are trained and compared; the best-performing one is saved for predictions.</p>
+        <ul class="algo-list">
+          <li><strong>Logistic Regression</strong> &mdash; linear probabilistic classifier.</li>
+          <li><strong>Decision Tree</strong> &mdash; rule-based hierarchical splits.</li>
+          <li><strong>Random Forest</strong> &mdash; ensemble of many decision trees.</li>
+          <li><strong>Support Vector Machine</strong> &mdash; maximum-margin classifier.</li>
+          <li><strong>K-Nearest Neighbor</strong> &mdash; instance-based, distance-driven.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel mt-4">
+    <h4 class="fw-bold mb-3">Machine Learning Workflow</h4>
+    <div class="workflow-track light">
+      {% for step in ['Load Dataset','Data Cleaning','EDA','Visualization','Train-Test Split','Feature Scaling','Train Models','Evaluate','Save Best Model','Prediction'] %}
+      <div class="workflow-step">
+        <span class="workflow-num">{{ loop.index }}</span>
+        <span class="workflow-label">{{ step }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
